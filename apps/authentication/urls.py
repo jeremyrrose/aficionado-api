@@ -1,5 +1,5 @@
 from django.conf.urls import url, include
-from apps.authentication.views import RegistrationAPIView, LoginAPIView, UserListViewSet
+from .views import RegistrationAPIView, LoginAPIView, UserListViewSet
 
 urlpatterns = [
     url(r'^users/$', UserListViewSet.as_view({'get': 'list'}), name='user_list'),
