@@ -26,7 +26,7 @@ class PhotoSerializer(serializers.ModelSerializer):
 
 class PhotographerProfileSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    photos = PhotoSerializer(many=True, read_only=False, required=False)
+    photos = PhotoSerializer(many=True, read_only=True, required=False)
 
 
     # customerprofiles = CustomerProfileSerializer(many=True, read_only=True, required=False)
