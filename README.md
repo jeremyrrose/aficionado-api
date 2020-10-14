@@ -1,6 +1,7 @@
 # Aficionado API
 
 Forked from [Besrat Z.'s Capture API](https://github.com/bzerehaimanot8/p4backend).
+Deployed at https://aficionado-api.herokuapp.com/
 
 ## User Stories
 
