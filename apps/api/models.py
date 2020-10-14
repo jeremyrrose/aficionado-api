@@ -14,31 +14,31 @@ class Tag(models.Model):
         return self.tag_name
 
 
-class PhotographerProfile(models.Model):
+class CreatorProfile(models.Model):
     class Meta:
-        verbose_name_plural = 'photographerprofiles'
+        verbose_name_plural = 'creator_profiles'
 
     name = models.CharField(max_length=100)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     email = models.EmailField(max_length=100)
-    phone = models.CharField(max_length=100)
-    image_url = models.URLField(max_length=500)
-    tags = models.ManyToManyField(Tag)
+    phone = models.CharField(max_length=100, blank=True)
+    image_url = models.URLField(max_length=500, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True, related_name="creators")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
 
-# Do I need a photo an array of photos for the class Photo?
-class Photo(models.Model):
+
+class Image(models.Model):
     class Meta:
-        verbose_name_plural = 'photos'
+        verbose_name_plural = 'images'
 
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
-    photo_url = models.URLField(max_length=500)
-    photographerprofile = models.ForeignKey(PhotographerProfile, related_name='photos', on_delete=models.CASCADE)
+    image_url = models.URLField(max_length=500)
+    creator_profile = models.ForeignKey(CreatorProfile, related_name='images', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
@@ -46,20 +46,16 @@ class Photo(models.Model):
 
 class CustomerProfile(models.Model):
     class Meta:
-        verbose_name_plural = 'customerprofiles'
+        verbose_name_plural = 'customer_profiles'
 
     name = models.CharField(max_length=100)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     email = models.EmailField(max_length=100)
-    phone = models.CharField(max_length=100)
-    image_url = models.URLField(max_length=200)
+    phone = models.CharField(max_length=100, blank=True)
+    image_url = models.URLField(max_length=200, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    prospect_list = models.ManyToManyField(PhotographerProfile, blank=True)
-
-    # class ProspectList(models.Model):
-    #
-    #     photographer = models.ForeignKey(PhotographerProfile, related_name='recipes', on_delete=models.CASCADE)
+    prospect_list = models.ManyToManyField(CreatorProfile, related_name='supporters', blank=True)
 
     def __str__(self):
         return self.name

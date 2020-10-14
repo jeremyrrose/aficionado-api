@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Tag, PhotographerProfile, Photo, CustomerProfile
+from .models import Tag, CreatorProfile, Image, CustomerProfile
 
 
 # we need to serialize our data so that it's in a format we can use
@@ -16,32 +16,27 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
                   'updated_at', 'prospect_list')
 
 
-class PhotoSerializer(serializers.ModelSerializer):
-    # owner = serializers.ReadOnlyField(source='owner.username')
+class ImageSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Photo
-        fields = ('id', 'title', 'description', 'photo_url', 'photographerprofile')
-
-
-class PhotographerProfileSerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source='owner.username')
-    photos = PhotoSerializer(many=True, read_only=True, required=False)
-
-
-    # customerprofiles = CustomerProfileSerializer(many=True, read_only=True, required=False)
-
-    class Meta:
-        model = PhotographerProfile
-        fields = ('id', 'name', 'owner', 'email', 'phone', 'image_url', 'photos', 'tags',
-                  'created_at', 'updated_at')
+        model = Image
+        fields = ('id', 'title', 'description', 'image_url', 'creator_profile')
 
 
 class TagSerializer(serializers.ModelSerializer):
-    # owner = serializers.ReadOnlyField(source='owner.username')
-    # photographerprofiles = PhotographerProfileSerializer(many=True, read_only=True, required=False)
 
     class Meta:
         model = Tag
-        fields = ('tag_name')
-#
+        fields = ('id', 'tag_name')
+
+
+class CreatorProfileSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+    images = ImageSerializer(many=True, read_only=True, required=False)
+    supporters = CustomerProfileSerializer(many=True)
+    tags = TagSerializer(many=True)
+
+    class Meta:
+        model = CreatorProfile
+        fields = ('id', 'name', 'owner', 'email', 'phone', 'image_url', 'images', 'tags', 'supporters',
+                  'created_at', 'updated_at')
